@@ -38,7 +38,7 @@ class TaskCreate(BaseModel):
 class TaskUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
-    due_date: Optional[str] = None
+    due_date: Optional[datetime] = None
     completed: Optional[bool] = None
 
 class TaskSearchModel(BaseModel):

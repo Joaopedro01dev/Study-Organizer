@@ -93,7 +93,7 @@ def put_task(task_id):
     Update a task by id
     """
 
-    data = request.context.json.model_dump(exclude_unset=True)
+    data = request.context.json.model_dump(exclude_unset=True, mode="python")
 
     current_user_identify = get_jwt_identity()
     user = db.session.scalars(select(User).filter_by(email=current_user_identify)).first()
@@ -106,10 +106,7 @@ def put_task(task_id):
         return response, 404
     
     if "completed" in data:
-        if data["completed"] is True:
-            task.completed_at = datetime.now(timezone.utc)
-        else:
-            task.completed_at = None
+        task.completed_at = datetime.utcnow() if data["completed"] else None
 
     for key, value in data.items():
         setattr(task, key, value)
