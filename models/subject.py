@@ -51,7 +51,7 @@ class SubjectResponse(OrmBase):
     progress_percentage: float
     next_due_date: Optional[datetime] = None
 
-class SubjectResponseList(OrmBase):
+class SubjectResponseList(BaseModel):
     subjects: list[SubjectResponse]
 
 # O que a gente quer que a API RECEBA

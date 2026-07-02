@@ -33,7 +33,7 @@ def get_tasks(query: TaskSearchModel):
 
     tasks_list = db.session.scalars(stmt).all()
 
-    response = TaskResponseList([TaskResponse.model_validate(task) for task in tasks_list]).to_response_dict()
+    response = TaskResponseList(tasks=[TaskResponse.model_validate(task) for task in tasks_list]).to_response_dict()
     return response, 200
 
 @task_controller.post("/")
@@ -99,7 +99,7 @@ def put_task(task_id):
     user = db.session.scalars(select(User).filter_by(email=current_user_identify)).first()
 
     stmt = select(StudyTask).join(Subject).filter(StudyTask.id == task_id, Subject.user_id == user.id)
-    task = db.session.get(stmt).first()
+    task = db.session.scalars(stmt).first()
 
     if not task:
         response = GenericResponse(msg="Tarefa nao encontrada ou acesso negado")
@@ -131,7 +131,7 @@ def delete_task(task_id):
     user = db.session.scalars(select(User).filter_by(email=current_user_identify)).first()
 
     stmt = select(StudyTask).join(Subject).filter(StudyTask.id == task_id, Subject.user_id == user.id)
-    task = db.session.get(stmt).first()
+    task = db.session.scalars(stmt).first()
 
     if not task:
         response = GenericResponse(msg="Tarefa nao encontrada ou acesso negado")
